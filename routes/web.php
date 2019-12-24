@@ -11,6 +11,18 @@
 |
 */
 
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin', function () {
+        echo 'Admin';
+    });
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', function () {
+        echo 'user';
+    });
+});
+
 Route::get('/', function () {
     return view('welcome');
 });
