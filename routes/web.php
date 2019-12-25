@@ -12,6 +12,9 @@
 */
 
 Route::middleware(['auth', 'admin'])->group(function () {
+
+    Route::resource('/admin/customers', 'Admin\CustomerController');
+
     Route::get('/admin', function () {
         echo 'Admin';
     });
