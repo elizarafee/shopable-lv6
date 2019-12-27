@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\User;
 
-class CustomerController extends Controller
+class DashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +14,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $customers = User::where('is_admin', 0)->paginate(10);
-
-        return view('manage.customers.index', ['customers' => $customers]);
+        return view('dashboard');
     }
 
     /**
@@ -49,9 +46,7 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        
-
-        
+        //
     }
 
     /**

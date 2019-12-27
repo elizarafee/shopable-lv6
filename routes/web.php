@@ -11,13 +11,14 @@
 |
 */
 
-Route::middleware(['auth', 'admin'])->group(function () {
+Route::group(['prefix' => 'manage', 'middleware' => ['auth', 'admin']], function () {
 
-    Route::resource('/admin/customers', 'Admin\CustomerController');
+    Route::post('products/variants', 'Admin\ProductController@variants');
+    Route::resource('administrators', 'Admin\AdministratorController');
+    Route::resource('products', 'Admin\ProductController');
+    Route::resource('customers', 'Admin\CustomerController');
 
-    Route::get('/admin', function () {
-        echo 'Admin';
-    });
+    Route::get('/', 'Admin\DashboardController@index');
 });
 
 Route::middleware(['auth'])->group(function () {
