@@ -39,6 +39,7 @@
 
                         <div class="col-md-6">
                             <select class="custom-select" name="type">
+                                <option value=""> -- Please select -- </option>
                                 @foreach(product_types() as $product_type)
                                 <option value="{{$product_type['id']}}">{{$product_type['name']}}</option>
                                 @endforeach 
@@ -56,8 +57,17 @@
 
                     <div class="form-group row">
                         <label for="vendor" class="col-md-4 col-form-label text-md-right">Vendor</label>
+
                         <div class="col-md-6">
-                            <input id="vendor" type="text" class="form-control @error('vendor') is-invalid @enderror" name="vendor"/>
+                            <select class="custom-select" name="vendor">
+                                <option value=""> -- Please select -- </option>
+                                @foreach(product_vendors() as $product_vendor)
+                                <option value="{{$product_vendor['id']}}">{{$product_vendor['name']}}</option>
+                                @endforeach 
+                                
+                               
+                            </select>
+
                             @error('vendor')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

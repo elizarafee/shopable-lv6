@@ -16,6 +16,7 @@ class CreateProductVendorsTable extends Migration
         Schema::create('product_vendors', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->boolean('active')->default(1);
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();
