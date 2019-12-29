@@ -181,11 +181,15 @@ class ProductController extends Controller
     public function storeProductVariants(StoreProductVariantRequest $request, $product_id)
     {
 
-        $all = $request->all();
+        $data = $request->all();
 
         echo "<pre>";
-        print_r($all);
+        print_r($data);
         echo "</pre>";
+
+       
+
+      // return redirect()->back()->with('data', $data);
     }
 
     /**

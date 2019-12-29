@@ -39706,6 +39706,7 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()('.tags').amsifySuggestags({
   type: 'amsify'
 });
 jquery__WEBPACK_IMPORTED_MODULE_0___default()('.tags').on('suggestags.change', function (e) {
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()('#variants-table').removeClass('d-none');
   var variants = [];
   var variants_table = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#variants-table tbody');
   variants.push(jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name="variant_options[0]"]').val());
@@ -39716,9 +39717,8 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()('.tags').on('suggestags.change', f
   }).then(function (response) {
     variants_table.empty();
     response.data.forEach(function (variant, index) {
-      var item = '<tr id="variant-' + index + '">' + '<td><input type="hidden" class="form-control" name="variants[' + index + '][name]" value="' + variant + '"><strong>' + variant + '</strong></td>' + '<td><input type="text" class="form-control" name="variants[' + index + '][sku]" value=""></td>' + '<td><input type="text" class="form-control" name="variants[' + index + '][barcode]" value=""></td>' + '<td><input type="text" class="form-control" name="variants[' + index + '][price]" value=""></td>' + '<td><input type="text" class="form-control" name="variants[' + index + '][quantity]" value=""></td>' + '<td><button class="variant-button" type="button" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"></i></button></td>';
-      '</tr>';
-      variants_table.append('<tr><td>' + item + '</td></tr>');
+      var item = '<tr id="variant-' + index + '-item">' + '<td><input type="text" class="form-control form-control-sm" name="variants[' + index + '][name]" value="' + variant + '" readonly></td>' + '<td><input type="text" class="form-control form-control-sm" name="variants[' + index + '][sku]" value=""></td>' + '<td><input type="text" class="form-control form-control-sm" name="variants[' + index + '][barcode]" value=""></td>' + '<td><input type="text" class="form-control form-control-sm text-right" name="variants[' + index + '][price]" value=""></td>' + '<td><input type="text" class="form-control form-control-sm text-right" name="variants[' + index + '][quantity]" value=""></td>' + '<td><span class="variant-button p-2" data-item="' + index + '"><i class="fa fa-trash text-danger"></i></span></td>' + '</tr>';
+      variants_table.append(item);
     });
   })["catch"](function (error) {
     console.log(error);
@@ -39746,6 +39746,15 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()('#browse').on('change', function (
   if (files) {
     preview.innerHTML = '';
     [].forEach.call(files, readAndPreview);
+  }
+});
+jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', '.variant-button', function () {
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()("#variant-" + jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('item') + "-item").remove();
+  var no_of_row = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#variants-table tbody tr').length;
+  console.log(no_of_row);
+
+  if (no_of_row == 0) {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()('#variants-table').addClass('d-none');
   }
 });
 

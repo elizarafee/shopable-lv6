@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import Croppie from 'croppie';
-import s from 'suggestags';
+import * as suggestags from 'suggestags';
 import axois from 'axios';
 
 $('.tags').amsifySuggestags({
@@ -9,6 +9,7 @@ $('.tags').amsifySuggestags({
 
 $('.tags').on('suggestags.change', function(e){
 
+    $('#variants-table').removeClass('d-none');
     let variants = [];
 
     let variants_table = $('#variants-table tbody');
@@ -22,19 +23,20 @@ $('.tags').on('suggestags.change', function(e){
       })
       .then(function (response) {
 
+        
         variants_table.empty();
         response.data.forEach(function(variant, index) {
 
-            let item = '<tr id="variant-'+index+'">'+
-                        '<td><input type="hidden" class="form-control" name="variants['+index+'][name]" value="'+variant+'"><strong>'+variant+'</strong></td>'+
-                        '<td><input type="text" class="form-control" name="variants['+index+'][sku]" value=""></td>'+
-                        '<td><input type="text" class="form-control" name="variants['+index+'][barcode]" value=""></td>'+
-                        '<td><input type="text" class="form-control" name="variants['+index+'][price]" value=""></td>'+
-                        '<td><input type="text" class="form-control" name="variants['+index+'][quantity]" value=""></td>'+
-                        '<td><button class="variant-button" type="button" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"></i></button></td>'
+            let item = '<tr id="variant-'+index+'-item">'+
+                        '<td><input type="text" class="form-control form-control-sm" name="variants['+index+'][name]" value="'+variant+'" readonly></td>'+
+                        '<td><input type="text" class="form-control form-control-sm" name="variants['+index+'][sku]" value=""></td>'+
+                        '<td><input type="text" class="form-control form-control-sm" name="variants['+index+'][barcode]" value=""></td>'+
+                        '<td><input type="text" class="form-control form-control-sm text-right" name="variants['+index+'][price]" value=""></td>'+
+                        '<td><input type="text" class="form-control form-control-sm text-right" name="variants['+index+'][quantity]" value=""></td>'+
+                        '<td><span class="variant-button p-2" data-item="'+index+'"><i class="fa fa-trash text-danger"></i></span></td>'+
                       '</tr>';
         
-            variants_table.append('<tr><td>'+item+'</td></tr>');
+            variants_table.append(item);
 
           })
       })
@@ -76,6 +78,19 @@ var files   = document.querySelector('input[type=file]').files;
 
   }
 
+});
+
+
+$(document).on('click', '.variant-button', function() {
+  $("#variant-"+$(this).data('item')+"-item").remove();
+
+  let no_of_row = $('#variants-table tbody tr').length;
+
+  console.log(no_of_row);
+
+  if(no_of_row == 0) {
+    $('#variants-table').addClass('d-none');
+  }
 });
 
 
