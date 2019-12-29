@@ -16,7 +16,7 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('type_id');
-            $table->string('vendor_id')->nullable();
+            $table->integer('vendor_id')->nullable();
 
             $table->string('title');
             $table->text('description');
@@ -35,8 +35,8 @@ class CreateProductsTable extends Migration
             $table->boolean('shipping_required')->default(1);
             $table->decimal('weight', 8, 2)->default(0.00);
 
-            $table->string('page_title');
-            $table->text('meta_description');
+            $table->string('page_title')->nullable();;
+            $table->text('meta_description')->nullable();
 
             $table->boolean('available')->default(0);
             $table->date('available_after')->nullable();

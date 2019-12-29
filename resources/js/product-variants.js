@@ -1,5 +1,6 @@
 import $ from 'jquery';
-import suggestags from 'suggestags';
+import Croppie from 'croppie';
+import s from 'suggestags';
 import axois from 'axios';
 
 $('.tags').amsifySuggestags({
@@ -16,7 +17,7 @@ $('.tags').on('suggestags.change', function(e){
     variants.push($('input[name="variant_options[1]"]').val());
     variants.push($('input[name="variant_options[2]"]').val());
     
-    axios.post('/manage/products/variants', {
+    axios.post('/manage/product-variants', {
         variants: variants
       })
       .then(function (response) {
@@ -41,3 +42,47 @@ $('.tags').on('suggestags.change', function(e){
         console.log(error);
       });
 });
+
+
+$('#browse').on('change', function(){
+
+  var preview = document.querySelector('#preview');
+var files   = document.querySelector('input[type=file]').files;
+
+
+  function readAndPreview(file) {
+
+    // Make sure `file.name` matches our extensions criteria
+    if ( /\.(jpe?g|png|gif)$/i.test(file.name) ) {
+      var reader = new FileReader();
+
+      reader.addEventListener("load", function () {
+       
+        var image = new Image();
+        image.height = 100;
+        image.title = file.name;
+        image.src = this.result;
+        preview.appendChild(image);
+      }, false);
+
+      reader.readAsDataURL(file);
+    }
+
+  }
+
+  if (files) {
+    preview.innerHTML = '';
+    [].forEach.call(files, readAndPreview);
+
+  }
+
+});
+
+
+
+
+
+
+
+
+

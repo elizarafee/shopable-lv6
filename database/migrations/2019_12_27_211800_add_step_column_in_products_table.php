@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateUserAddessesTable extends Migration
+class AddStepColumnInProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class UpdateUserAddessesTable extends Migration
      */
     public function up()
     {
-        Schema::table('user_addresses', function (Blueprint $table) {
-            $table->boolean('is_same_shipping')->default(0)->after('country');
-         });
+        Schema::table('products', function (Blueprint $table) {
+            $table->integer('step_of_inventory')->default(1)->after('available_after');
+        });
     }
 
     /**
@@ -25,13 +25,8 @@ class UpdateUserAddessesTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('products', function (Blueprint $table) {
+            //
+        });
     }
 }
-
-
-
-
-
-
-
