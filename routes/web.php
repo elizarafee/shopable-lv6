@@ -25,11 +25,10 @@ Route::group(['prefix' => 'manage', 'middleware' => ['auth', 'admin']], function
     Route::get('products/{product_id}/images/create', 'Admin\ProductController@createProductImages');
     Route::post('products/{product_id}/images', 'Admin\ProductController@storeProductImages');
     
-
     Route::get('products/{product_id}/variants/create', 'Admin\ProductController@createProductVariants');
+    Route::post('products/{product_id}/proceed-to-variants', 'Admin\ProductController@proceedToProductVariants');
     Route::post('products/{product_id}/variants', 'Admin\ProductController@storeProductVariants');
     
-
     Route::get('products/{product_id}/availability/create', 'Admin\ProductController@createProductAvailability');
     Route::post('products/{product_id}/availability', 'Admin\ProductController@storeProductAvailability');
     

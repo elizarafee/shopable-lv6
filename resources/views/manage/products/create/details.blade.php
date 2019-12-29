@@ -8,21 +8,30 @@
     <div class="col-md-10">
 
         <div class="progress" style="height: 35px; margin-bottom: 10px;">
-            <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">Product Details</div>
-            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Product Images</div>
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 25%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">Product Details</div>
+            <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Product Images</div>
             <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Product Variants</div>
             <div class="progress-bar bg-info" style="width: 25%" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%">Availability</div>
         </div>
 
-        <div class="card">
+        <div class="card mb-5">
+
+        <form method="POST" action="{{url('/manage/products/details')}}">
+                    @csrf
+
+        <div class="card-header">
+                <h5 class="card-title">Product Details</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Please insert product details</h6>
+            </div>
+
+
 
             <div class="card-body">
                 <h5 class="card-title">Product</h5>
                 <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
                 <hr class="mt-0" />
 
-                <form method="POST" action="{{url('/manage/products/details')}}">
-                    @csrf
+              
 
 
 
@@ -319,18 +328,21 @@
 
 
 
-                    <hr />
+                   
 
 
-                    <div class="form-group row mb-0">
-                        <div class="col-md-6 offset-md-4">
-                            <button type="submit" class="btn btn-outline-primary">
-                                {{ __('Register') }}
-                            </button>
-                        </div>
-                    </div>
-                </form>
+                
+                
             </div>
+
+            <div class="card-footer">
+
+            <button type="submit" class="btn btn-outline-primary">
+                        Save product details
+                    </button>
+            </div>
+
+            </form>
         </div>
     </div>
 </div>

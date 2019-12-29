@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
+use Illuminate\Support\Facades\Auth;
 use App\Product;
+use App\ProductImage;
 use App\Http\Requests\StoreProductDetailsRequest;
 use Image;
-
-
+use App\Http\Requests\StoreProductImageRequest;
+use App\Http\Requests\StoreProductVariantRequest;
 
 class ProductController extends Controller
 {
@@ -83,7 +85,11 @@ class ProductController extends Controller
      */
     public function createProductImages($product_id)
     {
-        return view('manage.products.create.images');
+        $product = Product::find($product_id);
+        if(!$product || !$product->step_to_inventory < 2) {
+            return redirect('/manage/products/details/create')->with('warning', 'Product details not found. Please create product.');
+        }
+        return view('manage.products.create.images', ['product_id' => $product_id]);
     }
 
     /**
@@ -92,18 +98,13 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function storeProductImages(Request $request, $product_id)
+    public function storeProductImages(StoreProductImageRequest $request, $product_id)
     {
-
-        $this->validate($request, [
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
 
         $image = $request->file('image');
 
         // Normal image - main view 
         $normal = Image::make($image->path());
-        // resize the image to a width of 300 and constrain aspect ratio (auto height)
         $normal->resize(600, null, function ($constraint) {
             $constraint->aspectRatio();
         });
@@ -129,10 +130,23 @@ class ProductController extends Controller
         Storage::disk('s3')->put('products/' . $product_id . '/small/' . $image_name, $small_image);
         Storage::disk('s3')->put('products/' . $product_id . '/thumbnail/' . $image_name, $thumbnail_image);
 
-        return redirect()->back()->with('success', 'Image successfully uploaded');
+        $image_details = [
+            'product_id' => $product_id,
+            'image' => $image_name,
+            'created_by' => Auth::user()->id
+        ];
+
+        $store_image = ProductImage::create($image_details);
+        
+        if($store_image) {
+            Product::where('id', $product_id)->update(['step_of_inventory' => 3]);
+            return redirect('/manage/products/'.$product_id.'/images/create')->with('success', 'Image successfully uploaded');
+        }
+
+        return redirect()->back()->with('error', 'Failed to store image. Please try again.');
     }
 
-
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -140,7 +154,7 @@ class ProductController extends Controller
      */
     public function createProductVariants($product_id)
     {
-        return view('manage.products.create.variants');
+        return view('manage.products.create.variants', ['product_id' => $product_id]);
     }
 
     /**
@@ -149,13 +163,29 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function storeProductVariants(Request $request, $product_id)
+    public function proceedToProductVariants(Request $request, $product_id)
+    {
+        $update_steps = Product::where('id', $product_id)->update(['step_of_inventory' => 3]);
+        if($update_steps) {
+            return redirect('/manage/products/'.$product_id.'/variants/create');
+        }
+        return redirect('/manage/products/'.$product_id.'/images/create')->with('error', 'Please store product images.');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeProductVariants(StoreProductVariantRequest $request, $product_id)
     {
 
         $all = $request->all();
 
         echo "<pre>";
         print_r($all);
+        echo "</pre>";
     }
 
     /**
@@ -165,7 +195,7 @@ class ProductController extends Controller
      */
     public function createProductAvailability($product_id)
     {
-        return view('manage.products.create.availability');
+        return view('manage.products.create.availability', ['product_id' => $product_id]);
     }
 
     /**
